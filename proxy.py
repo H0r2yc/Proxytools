@@ -1,18 +1,18 @@
 import socket
 from socket import error
 import random
-import time
+import getopt
 import sys
-#获取当前时间
-currenttime = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
 class ProxyServerTest():
-    def __init__(self):
+    def __init__(self,port,filename):
         #AF_INET　　——————————    使用IPv4
         #SOCK_STREAM      TCP套接字类型  一般这种类型比较有用
         self.ip_list = {}
+        self.port = port
+        self.filename = filename
     def Loadips(self):
         print("[*]Loading file proxy ip...")
-        with open(sys.argv[1]) as content:
+        with open(self.filename) as content:
             lines = content.readlines()
             for line in lines:
                 ip, port = line.strip().split(":",1)
@@ -23,7 +23,7 @@ class ProxyServerTest():
             server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             try:
                 # bind 绑定到某端口，用于服务端
-                server.bind(('127.0.0.1', 9999))
+                server.bind(('127.0.0.1', int(self.port))) #9999为端口，可更改
                 # 连接数量
                 server.listen(10)
                 print('[*]Waiting connection..')
@@ -38,7 +38,7 @@ class ProxyServerTest():
                 data = connection.recv(1024)
                 if not data:
                     break
-                    print('[*] %s Waiting accept data...' % currenttime)
+                    print('[*] Waiting accept data...')
             except error as e:
                 print('[-]accept error: ' + str(e))
             print('[*]accept data from client success')
@@ -87,11 +87,38 @@ class ProxyServerTest():
             server.close()
             proxyserver.close()
 
+def usage():
+    print('python proxy.py -f <filename> [-p <port>] [-h]')
+    print(' -f |--file <filename>')
+    print(' -p |--port Set proxy port,default 9999')
+    print(' -h |--help Shows this help\n')
+    print('Eg. python fixfuzz.py -f ip.txt -p 9999\n')
 
-def main():
+def main(argv):
+    port = 9999
+    try:
+        opts, args = getopt.getopt(argv, 'hf:p:', ['help', 'file=', 'port='])
+    except getopt.GetoptError:
+        usage()
+        sys.exit(-1)
+    for i,u in opts:
+        if i in ('-h','--help'):
+            usage()
+            exit(-1)
+        if i in ('-f','--file'):
+            filename = u
+        if i in ('-p','--port'):
+            port = u
+    try:
+        if filename == '':
+            usage()
+            sys.exit(-1)
+    except:
+        usage()
+        sys.exit(-1)
     print('\033[01;32m[*] start process...\033[0m')
-    start = ProxyServerTest()
+    start = ProxyServerTest(port,filename)
     start.Loadips()
     start.run()
 if __name__ == '__main__':
-    main()
+    main(sys.argv[1:])
