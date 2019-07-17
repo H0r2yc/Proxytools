@@ -89,7 +89,7 @@ class ProxyServerTest():
 
 
 def main():
-    print('\033[01;32m\[*] start process...\033[0m')
+    print('\033[01;32m[*] start process...\033[0m')
     start = ProxyServerTest()
     start.Loadips()
     start.run()
