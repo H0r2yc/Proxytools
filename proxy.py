@@ -92,7 +92,7 @@ def usage():
     print(' -f |--file <filename>')
     print(' -p |--port Set proxy port,default 9999')
     print(' -h |--help Shows this help\n')
-    print('Eg. python fixfuzz.py -f ip.txt -p 9999\n')
+    print('Eg. python proxy.py -f ip.txt -p 9999\n')
 
 def main(argv):
     port = 9999
