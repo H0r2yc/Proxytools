@@ -93,7 +93,6 @@ def usage():
     print(' -p |--port Set proxy port,default 9999')
     print(' -h |--help Shows this help\n')
     print('Eg. python proxy.py -f ip.txt -p 9999\n')
-
 def main(argv):
     port = 9999
     try:
@@ -120,5 +119,6 @@ def main(argv):
     start = ProxyServerTest(port,filename)
     start.Loadips()
     start.run()
-if __name__ == '__main__':
+
+ if __name__ == '__main__':
     main(sys.argv[1:])
