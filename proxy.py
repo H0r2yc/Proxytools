@@ -56,11 +56,11 @@ class ProxyServerTest():
                         proxyserver.settimeout(10)
                         proxyserver.connect((proxyip[0], int(proxyport)))
                         print('[*]connect to proxy server success')
+                        break
                     except:
                         count -= 1
                         print("[-]Connect failed,Reconnect {} times will change proxy ip .." .format(count))
                         continue
-                    break
                 break
             try:
                 proxyserver.send(data)
